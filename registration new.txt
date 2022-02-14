@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./index.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
 </head>
 <body>
     
@@ -28,35 +29,22 @@
                     <div class="form-group">
                         <input type="email"  name="email" id="email" placeholder="Email" class="form-control" /> 
                 </div>
-                <div class="form-group">
-                    <input type="date"  name="date" id="date"  class="form-control" /> 
-            </div>
-            <div class="form-group">
-                <textarea  name="address" id="address" placeholder="Address" class="form-control"></textarea> 
-        </div>
+               
+            
                 <div class="form-group">
                     <h6>Hobbies:-</h6>
                    Cricket <input type="checkbox"  name="hobby" id="hobby"   value="cricket" class="form-check-input ch" />
-                   FootBall <input type="checkbox"  name="hobby" id="hobby"  value="football" class="form-check-input ch"/> 
-                   Reading <input type="checkbox"  name="hobby" id="hobby" value="reading" class="form-check-input ch"/> 
+                   FootBall <input type="checkbox" name="hobby" id="hobby"   value="football" class="form-check-input ch"/> 
+                   Reading <input type="checkbox"  name="hobby" id="hobby"   value="reading" class="form-check-input ch"/> 
 
             </div>
             <br/>
-            <div class="form-group">
-                <h6>Gender:-</h6>
-                Male <input type="radio"  name="gender" id="gender"   value="male" class="form-check-input" />
-                Female <input type="radio"  name="gender" id="gender"   value="female" class="form-check-input" />
-
-         </div>
-         <div class="form-group">
-            <input type="password"  name="password" id="password" placeholder="Password " class="form-control"/> 
-    </div>
-    <div class="form-group">
-        <input type="password"  name="cpassword" id="cpassword" placeholder="Confirm Password" class="form-control"/> 
-</div>
+           
+        
             <br/>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Sign Up </button>
+                    <button type="submit" class="btn btn-primary" id="submit">Sign Up</button>
+                    <button type="button" class="btn btn-danger" id="update" style="display:none" onclick="updateData()" value="Update">Update </button>
 
                 </div>
                 </form>
@@ -64,97 +52,229 @@
                 <hr />
                 <br />
                 <h3> My Info</h3>
-                <div id="output">
-
+                <table class="table table-bordered table-dark table-responsive-sm">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="allSelect" class="form-check-input allSelect" onChange="toggleCheck()" />&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeleteAll" class="btn btn-danger btndanger btn-sm" onClick="deleteAll() ">Delete All</button>
+                                <button type="button" id="Clone" class="btn btn-success btnsuccess btn-sm" onClick="clonedata()">Clone</button>
+                            </th>
+                            <th>First name</th>
+                            <th>Last name</th>
+                            <th>Email</th>
+                            <th>Hobby</th>
+                            <th>Actions</th>    
+                        </tr>
+                        <tbody id="output">
+                          
+                        </tbody>
+                    </thead>
+                </table>
+                   
                 </div>
             </div>
 
             <script type="text/javascript">
-                        const signUp = e=>{
-                                e.preventDefault();
-                   
-                  
 
-                        let formData = JSON.parse(localStorage.getItem('formData')); 
+                                let submit=document.getElementById("submit");
+                                let update=document.getElementById("update");
+
+                function ResetAtt(){
+                    document.getElementById('fname').value =""
+                    document.getElementById('lname').value=""
+                    document.getElementById('email').value=""
+                    document.getElementById('hobby').checked = false;
+                    }
+     
+                        function toggleCheck(){
+
+                            let checkbox = document.querySelectorAll('input[class="tableCheck"]');
+                             let allSelectdata=document.getElementById('allSelect')   
+                            // if(allSelectdata.checked == true){
+                                checkbox.forEach((item)=>{
+
+                                    if(allSelectdata.checked == true){
+                                        item.checked =true;
+                                    }                      
+                                    else{
+                                        item.checked = false;
+                                    }                                                    
+                                })
+                                    }
+
+                         function clonedata(){
+                            let alldatas = JSON.parse(localStorage.getItem('formData'));
+                                let checkbox = document.querySelectorAll('input[class="tableCheck"]');
+ 
+                                let values = [];
+                                
+                            checkbox.forEach((check) => {
+                            values.push(check.value);
+                        });
+                                    
+                            let  arr = alldatas.filter(item => values.includes(item.id));
+                            localStorage.setItem('CloneData', JSON.stringify(arr));    
+
+                                    }
+                                    
+                
+                function deleteAll(){
+                 
+                                let alldatas = JSON.parse(localStorage.getItem('formData'));
+                                let checkbox = document.querySelectorAll('input[class="tableCheck"]:checked');
+ 
+                                let values = [];
+                                
+                            checkbox.forEach((check) => {
+
+
+                            values.push(check.value);
+                        });
+
+                        
+                                console.log(values);
+                                let  arr = alldatas.filter(item => !values.includes(item.id));
+    
+
+
+                            localStorage.setItem('formData', JSON.stringify(arr));                               
+                            displayData();
+                            }
+
+
+
+                 
+                        
+                const signUp = e=>{
+                    e.preventDefault();           
+                        let formData = JSON.parse(localStorage.getItem('formData')) ||[]; 
   
                         var hbox = document.querySelectorAll("input[type='checkbox']:checked");
                         
-                        let hobbArr=[];
+                            let hobbArr=[];
                       
                                 for(let i=0; i<hbox.length;i++){
                                     hobbArr.push(hbox[i].value)
                                          if(hbox[i].checked ==true){
 
                                             document.getElementsByName("hobby").checked =true
-
                                      }
                                 }
 
-                                if(document. getElementById('gender'). checked) {
-                                            gender.value ="male"
-                                }
-                                else if(document. getElementById('gender'). checked) {
-                                    gender.value ="female"
-                                }
-                               
-  
                          formData.push({
                                  id:new Date().getTime().toString(),
                                  fname:document.getElementById('fname').value,
                                 lname:document.getElementById('lname').value,
                                 email:document.getElementById('email').value,
-                                date:document.getElementById('date').value,
-                                gender:document.getElementById('gender').value,
-                                password:document.getElementById('password').value,
-                                cpassword:document.getElementById('cpassword').value,
                                 hobby: hobbArr
-                               
-
                          });    
+
                              localStorage.setItem("formData", JSON.stringify(formData))
                                  displayData();
+                                 ResetAtt();    
                                     e.preventDefault();
                         
                         };
                         
 
-                        function EditRegister() {
-                             JSON.parse(localStorage.getItem("formData")).forEach(data =>{
-                                    
+                        function EditRegister(id) {
+                           let dell= document.querySelectorAll(`input[type="checkbox"]`);
+                           let newd=[...dell];
+                           newd.forEach(e =>
+                                    e.removeAttribute("checked")
+                                    )
+                            console.log(newd);
+                               const local =  JSON.parse(localStorage.getItem("formData"))
+                                local.find(data =>{
+                                if(data.id == id){
+                                document.getElementById('hidden').value = data.id
+                                document.getElementById('fname').value = data.fname   
+                                document.getElementById('lname').value = data.lname   
+                                document.getElementById('email').value = data.email   
+    
+                                let hobbArr=data.hobby;
+                                    hobbArr.forEach(e =>
+                                    document.querySelector(`input[value=${e}]`).setAttribute("checked", "checked")
+                                    )
+                                } 
+                           else{
 
-                             })      
+                            }
+
+                          })    
+                                        update.style.display='block';
+                                        submit.style.display='none';  
                                 }
 
-                                        
 
-                        function displayData(){
-                          //  console.log(localStorage.getItem("formData"))
-                            if(localStorage.getItem("formData")){ 
+                             function DeleteRegister(id){
+                                const local =  JSON.parse(localStorage.getItem("formData"))
+                                const ll =   local.filter((e) =>{      
+                                            return e.id !=id   
+                                })
+                                    localStorage.setItem("formData", JSON.stringify(ll))
+                                    displayData();
+                             }
+
+
+                             function updateData(){
+                               const localVar=  document.getElementById('hidden').value;
+                               var hbox = document.querySelectorAll("input[type='checkbox']:checked");
+                               let hobbArr=[];
+                      
+                                    for(let i=0; i<hbox.length;i++){
+                                                hobbArr.push(hbox[i].value)
+                                                if(hobbArr[i].checked ==true)
+                                                {
+                                  document.getElementsByName("hobby").checked =true
+                           }
+                      }
+                                const local =  JSON.parse(localStorage.getItem("formData"));
+                              
+                             const localdata=local.map((e)=>{
+                                            if(e.id ==localVar){
+                                                console.log(e);
+                                               return {...e, 
+                                                fname:document.getElementById('fname').value, 
+                                               lname:document.getElementById('lname').value,
+                                               email:document.getElementById('email').value,
+                                               hobby:hobbArr}; 
+                                            }
+
+                                           return e;
+                                })
+                                    localStorage.setItem("formData",JSON.stringify(localdata))
+                                        
+                           
+                        }
+                                        
+                        function displayData(){                   
+                            
+                            if(localStorage.getItem("formData") !=null){ 
                            var output = document.getElementById('output'); 
-                           // var output = document.querySelector('tbody'); 
+                           
                             output.innerHTML=='';
-                           JSON.parse(localStorage.getItem("formData")).forEach(data =>{
-                             output.innerHTML+=`
-                             <table class="table">
-                            <tbody>
+                            let localData = JSON.parse(localStorage.getItem("formData"));
+
+                            localData.map(data =>{
+                           
+                             output.innerHTML +=` 
                             <tr>
+                            <td><input type="checkbox" id="AllCheckbox" class="tableCheck" value=${data.id} /></td>
                             <td>${data.fname}</td>
                             <td>${data.lname}</td>
                             <td>${data.email}</td>
-                            <td>${data.hobby} </td>
-                            <td>${data.date } </td>
-                            <td>${data.gender } </td>
+                            <td>${data.hobby} </td>                                                  
                             <td>
-                            <button class="btn btn-warning" onClick='EditRegister()'>Edit</button>
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-warning" onClick='EditRegister(${data.id})'>Edit</button>
+                            <button class="btn btn-danger" onClick='DeleteRegister(${data.id})'>Delete</button>
                             </td>
                             </tr>
-   
-                    </tbody>
-                </table>
-                `;                     
+
+                `;            
+                   
                            })
                                      }
+                                    
                                         }
                         displayData();
             </script>

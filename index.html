@@ -38,6 +38,7 @@
                    Reading <input type="checkbox"  name="hobby" id="hobby"   value="reading" class="form-check-input ch"/> 
 
             </div>
+    
             <br/>
            
         
@@ -51,12 +52,15 @@
                 <br/>
                 <hr />
                 <br />
-                <h3> My Info</h3>
-                <table class="table table-bordered table-dark table-responsive-sm">
+                <h3> My Info</h3><br/>
+                <input id="search" type="text" class="input" placeholder="search..."/><br/>
+                <table class="table table-striped table-dark table-responsive-sm">
+                    <h6><b><u>Register Table</u></b></h6>
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="allSelect" class="form-check-input allSelect" onChange="toggleCheck()" />&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" id="DeleteAll" class="btn btn-danger btndanger btn-sm" onClick="deleteAll() ">Delete All</button>
-                                <button type="button" id="Clone" class="btn btn-success btnsuccess btn-sm" onClick="clonedata()">Clone</button>
+                            <th><input type="checkbox" id="allSelect" class="form-check-input allSelect" onChange="toggleCheck()" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="button" id="DeleteAll" class="btn btn-danger btndanger badge" onClick="deleteAll() ">Delete All</button>
+                                <button type="button" id="Clone" class="btn btn-success btnsuccess badge" onClick="clonedata()">Clone</button>       
                             </th>
                             <th>First name</th>
                             <th>Last name</th>
@@ -65,18 +69,69 @@
                             <th>Actions</th>    
                         </tr>
                         <tbody id="output">
-                          
+                                
                         </tbody>
                     </thead>
+                </table>
+                            <br/>
+                            <br/>
+                            <hr/>
+                            <br/>
+                <table id="recy">
+                                <h6><b><u>Recycle Data Table</u></b></h6>
+                    <thead>
+                        <tr>
+                            
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Hobby</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                   <tbody id="RecycleData">    
+  
+                   </tbody>
                 </table>
                    
                 </div>
             </div>
 
             <script type="text/javascript">
+                    
 
                                 let submit=document.getElementById("submit");
                                 let update=document.getElementById("update");
+
+
+                    const searchData = document.getElementById("search");
+                    const rows = document.querySelectorAll("#output tr");
+
+                    searchData.addEventListener('keyup',function(){
+                                var keyword =this.value;
+
+                                var table =document.getElementById("output")    
+                                var all_tr = document.getElementsByTagName("tr")
+                                for(var i=0; i<all_tr.length; i++){
+                                    var all_columns = all_tr[i].getElementsByTagName("td");
+                                    for(j=0 ;j<all_columns.length;i++)
+                                    {
+                                            if(all_columns[j]){
+                                                var column_value=all_columns[j].textContent ||  all_columns[j].innerText;
+                                                column_value=column_value.toUpperCase();
+                                                if(column_value.indexOf(keyword) > -1){
+                                                    all_tr[i].style.display = "";
+                                                    break;
+                                                }
+                                                else{
+                                                    all_tr[i].style.display= "none";
+                                                 
+                                                }
+                                            }
+                                    }
+                                }
+                    })
 
                 function ResetAtt(){
                     document.getElementById('fname').value =""
@@ -84,9 +139,8 @@
                     document.getElementById('email').value=""
                     document.getElementById('hobby').checked = false;
                     }
-     
-                        function toggleCheck(){
-
+   
+                function toggleCheck(){
                             let checkbox = document.querySelectorAll('input[class="tableCheck"]');
                              let allSelectdata=document.getElementById('allSelect')   
                             // if(allSelectdata.checked == true){
@@ -103,13 +157,15 @@
 
                          function clonedata(){
                             let alldatas = JSON.parse(localStorage.getItem('formData'));
-                                let checkbox = document.querySelectorAll('input[class="tableCheck"]');
+                                let checkbox = document.querySelectorAll('input[class="tableCheck"]:checked');
  
                                 let values = [];
                                 
                             checkbox.forEach((check) => {
-                            values.push(check.value);
+                                        values.push(check.value);
+                   
                         });
+                        console.log(values);
                                     
                             let  arr = alldatas.filter(item => values.includes(item.id));
                             localStorage.setItem('CloneData', JSON.stringify(arr));    
@@ -125,29 +181,18 @@
                                 let values = [];
                                 
                             checkbox.forEach((check) => {
-
-
                             values.push(check.value);
                         });
-
-                        
-                                console.log(values);
-                                let  arr = alldatas.filter(item => !values.includes(item.id));
-    
-
-
+                      console.log(values);
+                            let  arr = alldatas.filter(item => !values.includes(item.id));
                             localStorage.setItem('formData', JSON.stringify(arr));                               
                             displayData();
                             }
-
-
-
                  
-                        
                 const signUp = e=>{
-                    e.preventDefault();           
-                        let formData = JSON.parse(localStorage.getItem('formData')) ||[]; 
-  
+                      
+                        let formData = JSON.parse(localStorage.getItem('formData'))||[] 
+
                         var hbox = document.querySelectorAll("input[type='checkbox']:checked");
                         
                             let hobbArr=[];
@@ -155,8 +200,7 @@
                                 for(let i=0; i<hbox.length;i++){
                                     hobbArr.push(hbox[i].value)
                                          if(hbox[i].checked ==true){
-
-                                            document.getElementsByName("hobby").checked =true
+                                             document.getElementsByName("hobby").checked =true
                                      }
                                 }
 
@@ -165,11 +209,12 @@
                                  fname:document.getElementById('fname').value,
                                 lname:document.getElementById('lname').value,
                                 email:document.getElementById('email').value,
+                               
                                 hobby: hobbArr
                          });    
 
                              localStorage.setItem("formData", JSON.stringify(formData))
-                                 displayData();
+                                  displayData();
                                  ResetAtt();    
                                     e.preventDefault();
                         
@@ -182,7 +227,7 @@
                            newd.forEach(e =>
                                     e.removeAttribute("checked")
                                     )
-                            console.log(newd);
+                           
                                const local =  JSON.parse(localStorage.getItem("formData"))
                                 local.find(data =>{
                                 if(data.id == id){
@@ -197,25 +242,83 @@
                                     )
                                 } 
                            else{
-
                             }
-
                           })    
                                         update.style.display='block';
                                         submit.style.display='none';  
                                 }
+                                    // localStorage.setItem("RecycleData",JSON.stringify([]))
+                                    let deData = JSON.parse(localStorage.getItem("RecycleData"))
+                                    // let alldatas = JSON.parse(localStorage.getItem('formData'));
 
-
+                            //Delete Data By Id And Send To Recycle localStorage Table 
                              function DeleteRegister(id){
-                                const local =  JSON.parse(localStorage.getItem("formData"))
+                                const local =  (JSON.parse(localStorage.getItem("formData")) ||[])
                                 const ll =   local.filter((e) =>{      
-                                            return e.id !=id   
+                                            return e.id !=id  
                                 })
+           
+                               let arr=  local.filter((item) =>{
+                                    return !ll.includes(item); 
+                                    } );
+                           
+                                    deData.push(...arr);
                                     localStorage.setItem("formData", JSON.stringify(ll))
-                                    displayData();
+                                    localStorage.setItem("RecycleData", JSON.stringify(deData)) ;   
+                                     displayData();
+                                     RecycleDatas();
+                                     window.location.reload(); 
                              }
 
 
+                                function DeleteRecycleData(id){
+                                    const local =  (JSON.parse(localStorage.getItem("RecycleData")) ||[])
+                                const ll =   local.filter((e) =>{      
+                                            return e.id !=id  
+                                })                   
+                                    localStorage.setItem("RecycleData", JSON.stringify(ll)) ;                    
+                                     RecycleDatas();
+                                     window.location.reload(); 
+                                }
+                            
+                            //Restore Data From Recycle LocalStorage table To Main Table Start
+                             function RestoreData(id){
+                              let RecycleData= JSON.parse(localStorage.getItem("RecycleData"))
+                               let dData = JSON.parse(localStorage.getItem("formData"))
+                             
+                               let arrr=[];
+                                const recy =  RecycleData.filter((item)=>{
+                                                if(item.id ==id){
+                                                    arrr.push(item)
+                                                }
+
+                                                return item.id !=id;
+                                })
+                                              
+                                let dd = RecycleData.filter((ff)=>{
+                                            return(
+                                                arrr.includes(ff)           
+                                            )                    
+                                             })
+                                           //  dData.push(...dd)
+
+                                               // localStorage.setItem("formData",JSON.stringify(dData))
+
+                                               if(dData.indexOf(dd) == -1){
+                                dData.push(...dd);
+                                window.localStorage.setItem("formData", JSON.stringify(dData));
+
+                                                localStorage.setItem("RecycleData",JSON.stringify(recy))
+
+                                                displayData();
+                                                RecycleDatas();  
+                                                window.location.reload();        
+                             }                     
+}
+
+                                 //Restore Data From Recycle LocalStorage table To Main Table End
+                            
+                            // Update Table Data Functionality Start
                              function updateData(){
                                const localVar=  document.getElementById('hidden').value;
                                var hbox = document.querySelectorAll("input[type='checkbox']:checked");
@@ -226,11 +329,11 @@
                                                 if(hobbArr[i].checked ==true)
                                                 {
                                   document.getElementsByName("hobby").checked =true
-                           }
-                      }
-                                const local =  JSON.parse(localStorage.getItem("formData"));
-                              
-                             const localdata=local.map((e)=>{
+                                                 }
+                                    }
+             
+                                const local =  JSON.parse(localStorage.getItem("formData"));                      
+                                            const localdata=local.map((e)=>{
                                             if(e.id ==localVar){
                                                 console.log(e);
                                                return {...e, 
@@ -244,21 +347,23 @@
                                 })
                                     localStorage.setItem("formData",JSON.stringify(localdata))
                                         
-                           
+                                displayData();
                         }
-                                        
+                         // Update Table Data Functionality End
+                         
+                        //Display Data Function              
                         function displayData(){                   
                             
-                            if(localStorage.getItem("formData") !=null){ 
+                            if(localStorage.getItem("formData") !=""){ 
                            var output = document.getElementById('output'); 
                            
                             output.innerHTML=='';
-                            let localData = JSON.parse(localStorage.getItem("formData"));
-
-                            localData.map(data =>{
+                            let localData = JSON.parse(localStorage.getItem("formData")) || []  ;
                            
-                             output.innerHTML +=` 
-                            <tr>
+                          let abcd=  localData.map(data =>{
+                           return(
+                               ` 
+                               <tr class="daaaa">
                             <td><input type="checkbox" id="AllCheckbox" class="tableCheck" value=${data.id} /></td>
                             <td>${data.fname}</td>
                             <td>${data.lname}</td>
@@ -266,17 +371,61 @@
                             <td>${data.hobby} </td>                                                  
                             <td>
                             <button class="btn btn-warning" onClick='EditRegister(${data.id})'>Edit</button>
-                            <button class="btn btn-danger" onClick='DeleteRegister(${data.id})'>Delete</button>
+                            <button class="btn btn-danger"  onClick='DeleteRegister(${data.id})'>Delete</button>
                             </td>
                             </tr>
-
-                `;            
-                   
+                               `
+                           );                  
                            })
+                           output.innerHTML=abcd;
                                      }
                                     
                                         }
+
+                 function RecycleDatas(){           
+                    var RecycleData = document.getElementById('RecycleData'); 
+                     
+                                if(JSON.parse(localStorage.getItem("RecycleData")).length == 0)
+                                {
+                                    document.getElementById("recy").innerHTML="<h2>No Data Avalilable</h2>"   ;
+                                    // window.location.reload();  
+                                       
+                                }
+
+                        else{
+                           if(JSON.parse(localStorage.getItem("RecycleData")) ==[]){
+                               localStorage.setItem("RecycleData",JSON.stringify([]))
+                           }
+
+                        
+                           
+                           RecycleData.innerHTML=='';
+                            let redata = JSON.parse(localStorage.getItem("RecycleData"));
+                           
+                          let abcd=  redata.map(data =>{
+                           return(
+                               ` 
+                               <tr class="daaaa">
+                     
+                            <td>${data.fname}</td>
+                            <td>${data.lname}</td>
+                            <td>${data.email}</td>
+                            <td>${data.hobby} </td>                                                  
+                            <td>
+                             <button class="btn btn-success badge py-2 m-2" onClick='RestoreData(${data.id})'>Restore</button>  
+                             <button class="btn btn-danger badge py-2 m-2" onClick='DeleteRecycleData(${data.id})'>Empty Restore</button>      
+                            </td>
+                            </tr>
+                               `
+                           );                  
+                           })
+                           RecycleData.innerHTML=abcd;
+                                             
+                                        }
+                 }
                         displayData();
+                        RecycleDatas();
+                         
             </script>
 </body>
 </html>
