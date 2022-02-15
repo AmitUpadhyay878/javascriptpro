@@ -13,48 +13,59 @@
     
 </head>
 <body>
-    
+            
             <div class="container">
                 <h2>Form Data in localStorage</h2>
-                <form onSubmit="signUp(event)">
-                    <div class="form-group">
-                        <input type="hidden" name="hidden" id="hidden" /> 
-                </div>
+                <form onSubmit="signUp(event)" style="border: 1px solid black; padding:20px; border-radius: 20px;">
+                    
                         <div class="form-group">
-                                <input type="text"  name="fname" id="fname" placeholder="First Name" class="form-control" /> 
+                            <input type="hidden" name="hidden" id="hidden" /> 
+                    </div>
+                            <div class="form-group">
+                                    <input type="text"  name="fname" id="fname" placeholder="First Name" class="form-control" /> 
+                            </div>
+                            <div class="form-group">
+                                <input type="text"  name="lname" id="lname" placeholder="Last Name" class="form-control"/> 
                         </div>
                         <div class="form-group">
-                            <input type="text"  name="lname" id="lname" placeholder="Last Name" class="form-control"/> 
+                            <input type="email"  name="email" id="email" placeholder="Email" class="form-control" /> 
                     </div>
+                   
+                
                     <div class="form-group">
-                        <input type="email"  name="email" id="email" placeholder="Email" class="form-control" /> 
+                        <h6>Hobbies:-</h6>
+                       Cricket <input type="checkbox"  name="hobby" id="hobby"   value="cricket" class="form-check-input ch" />
+                       FootBall <input type="checkbox" name="hobby" id="hobby"   value="football" class="form-check-input ch"/> 
+                       Reading <input type="checkbox"  name="hobby" id="hobby"   value="reading" class="form-check-input ch"/> 
+    
                 </div>
+        
+                <br/>
                
             
-                <div class="form-group">
-                    <h6>Hobbies:-</h6>
-                   Cricket <input type="checkbox"  name="hobby" id="hobby"   value="cricket" class="form-check-input ch" />
-                   FootBall <input type="checkbox" name="hobby" id="hobby"   value="football" class="form-check-input ch"/> 
-                   Reading <input type="checkbox"  name="hobby" id="hobby"   value="reading" class="form-check-input ch"/> 
-
-            </div>
+                <br/>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="submit">Sign Up</button>
+                        <button type="button" class="btn btn-danger" id="update" style="display:none" onclick="updateData()" value="Update">Update </button>
     
-            <br/>
-           
-        
-            <br/>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" id="submit">Sign Up</button>
-                    <button type="button" class="btn btn-danger" id="update" style="display:none" onclick="updateData()" value="Update">Update </button>
-
-                </div>
+                    </div>
+                        
+                 
                 </form>
                 <br/>
                 <hr />
                 <br />
                 <h3> My Info</h3><br/>
-                <input id="search" type="text" class="input" placeholder="search..."/><br/>
-                <table class="table table-striped table-dark table-responsive-sm">
+                <input type="text" onkeyup="myfilter(event)" id="myInput" placeholder="Enter User Name"/>      
+                <span>Filter Status</span> <select onchange="datafilter(event)" id="datafilter">
+                   
+                    <option value="">select</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                   
+                  </select>
+                <br/><br/>
+                <table class="table table-striped table-dark table-responsive-sm" id="dataT">
                     <h6><b><u>Register Table</u></b></h6>
                     <thead>
                         <tr>
@@ -66,6 +77,7 @@
                             <th>Last name</th>
                             <th>Email</th>
                             <th>Hobby</th>
+                            <th>Status</th>
                             <th>Actions</th>    
                         </tr>
                         <tbody id="output">
@@ -97,42 +109,72 @@
                    
                 </div>
             </div>
-
+            <br/>
+<hr />
             <script type="text/javascript">
                     
+                   
 
                                 let submit=document.getElementById("submit");
                                 let update=document.getElementById("update");
 
-
-                    const searchData = document.getElementById("search");
-                    const rows = document.querySelectorAll("#output tr");
-
-                    searchData.addEventListener('keyup',function(){
-                                var keyword =this.value;
-
-                                var table =document.getElementById("output")    
-                                var all_tr = document.getElementsByTagName("tr")
-                                for(var i=0; i<all_tr.length; i++){
-                                    var all_columns = all_tr[i].getElementsByTagName("td");
-                                    for(j=0 ;j<all_columns.length;i++)
-                                    {
-                                            if(all_columns[j]){
-                                                var column_value=all_columns[j].textContent ||  all_columns[j].innerText;
-                                                column_value=column_value.toUpperCase();
-                                                if(column_value.indexOf(keyword) > -1){
-                                                    all_tr[i].style.display = "";
-                                                    break;
-                                                }
-                                                else{
-                                                    all_tr[i].style.display= "none";
-                                                 
-                                                }
-                                            }
-                                    }
+                       
+                       
+                        // Filter Table Data By Name  
+                        function myfilter(e){
+                                console.log(e.target.value);
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("myInput");
+                                filter = input.value.toUpperCase();
+                                table = document.getElementById("dataT");
+                                let tablebody=document.getElementById('output');
+                                tr = tablebody.getElementsByTagName("tr");
+                                console.log(e.target.textContent);
+  
+                                // Loop through all table rows, and hide those who don't match the search query
+                                 for (i = 0; i < tr.length; i++) {
+                                td = tr[i].getElementsByTagName("td")[1];
+                                if (td) {
+                                txtValue = td.textContent || td.innerText;
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                                } else {
+                                tr[i].style.display = "none";
                                 }
-                    })
+                            }
+                        }
+  
+                    }
 
+                        // Filter Active/DeActive User using DropDown
+                       function datafilter(e){
+                        console.log(e.target.value);
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("datafilter");
+                                filter = input.value.toUpperCase();
+                                table = document.getElementById("dataT");
+                                let tablebody=document.getElementById('output');
+                                tr = tablebody.getElementsByTagName("tr");
+                               // console.log(e.target.textContent);
+  
+                                // Loop through all table rows, and hide those who don't match the search query
+                                 for (i = 0; i < tr.length; i++) {
+                                td = tr[i].getElementsByTagName("td")[5];
+                                if (td) {
+                                txtValue = td.textContent || td.innerText;
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                tr[i].style.display = "";
+                                }
+                              
+                                 else {
+                                tr[i].style.display = "none";
+                                }
+                            }
+                        }
+                       }
+
+                               
+        
                 function ResetAtt(){
                     document.getElementById('fname').value =""
                     document.getElementById('lname').value=""
@@ -209,7 +251,7 @@
                                  fname:document.getElementById('fname').value,
                                 lname:document.getElementById('lname').value,
                                 email:document.getElementById('email').value,
-                               
+                                Status: "offline",                              
                                 hobby: hobbArr
                          });    
 
@@ -368,7 +410,8 @@
                             <td>${data.fname}</td>
                             <td>${data.lname}</td>
                             <td>${data.email}</td>
-                            <td>${data.hobby} </td>                                                  
+                            <td>${data.hobby} </td> 
+                            <td>${data.Status}</td>                                                 
                             <td>
                             <button class="btn btn-warning" onClick='EditRegister(${data.id})'>Edit</button>
                             <button class="btn btn-danger"  onClick='DeleteRegister(${data.id})'>Delete</button>
@@ -385,14 +428,6 @@
                  function RecycleDatas(){           
                     var RecycleData = document.getElementById('RecycleData'); 
                      
-                                if(JSON.parse(localStorage.getItem("RecycleData")).length == 0)
-                                {
-                                    document.getElementById("recy").innerHTML="<h2>No Data Avalilable</h2>"   ;
-                                    // window.location.reload();  
-                                       
-                                }
-
-                        else{
                            if(JSON.parse(localStorage.getItem("RecycleData")) ==[]){
                                localStorage.setItem("RecycleData",JSON.stringify([]))
                            }
@@ -422,7 +457,7 @@
                            RecycleData.innerHTML=abcd;
                                              
                                         }
-                 }
+                
                         displayData();
                         RecycleDatas();
                          
