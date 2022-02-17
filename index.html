@@ -15,7 +15,7 @@
 <body>
             
             <div class="container">
-                <h2>Form Data in localStorage</h2>
+                <h4>Form Data Using localStorage</h4>
                 <form onSubmit="signUp(event)" style="border: 1px solid black; padding:20px; border-radius: 20px;">
                     
                         <div class="form-group">
@@ -64,7 +64,7 @@
                     <option value="offline">Offline</option>
                    
                   </select>
-                <br/><br/>
+                <br/><br/><hr>
                 <table class="table table-striped table-dark table-responsive-sm" id="dataT">
                     <h6><b><u>Register Table</u></b></h6>
                     <thead>
@@ -117,7 +117,7 @@
 
                                 let submit=document.getElementById("submit");
                                 let update=document.getElementById("update");
-
+       
                        
                        
                         // Filter Table Data By Name  
@@ -226,7 +226,7 @@
                             values.push(check.value);
                         });
                       console.log(values);
-                            let  arr = alldatas.filter(item => !values.includes(item.id));
+                            let  arr = alldatas.filter(item => values.includes(item.id));
                             localStorage.setItem('formData', JSON.stringify(arr));                               
                             displayData();
                             }
@@ -448,7 +448,7 @@
                             <td>${data.hobby} </td>                                                  
                             <td>
                              <button class="btn btn-success badge py-2 m-2" onClick='RestoreData(${data.id})'>Restore</button>  
-                             <button class="btn btn-danger badge py-2 m-2" onClick='DeleteRecycleData(${data.id})'>Empty Restore</button>      
+                             <button class="btn btn-danger badge py-2 m-2" onClick='DeleteRecycleData(${data.id})'>Remove Ever</button>      
                             </td>
                             </tr>
                                `
