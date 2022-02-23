@@ -1,0 +1,144 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    },
+    {
+      "title": "Amit",
+      "author": "kumar",
+      "id": 2
+    },
+    {
+      "title": "ayyaa ",
+      "author": "kumar",
+      "ll": "dfgdfg",
+      "id": 3
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "users": [
+    {
+      "fname": "rrrrrrr",
+      "lname": "ggg",
+      "email": "amit@gg.com",
+      "password": "rrr",
+      "Status": "offline",
+      "id": 12
+    },
+    {
+      "fname": "Amit",
+      "lname": "Upadhyay",
+      "email": "amit@gg.com",
+      "password": "dd",
+      "Status": "offline",
+      "id": 17
+    },
+    {
+      "fname": "Amit p",
+      "lname": "Upadhyay",
+      "email": "qwe@gg.vv",
+      "password": "kkk",
+      "Status": "offline",
+      "id": 18
+    },
+    {
+      "fname": "kkk",
+      "lname": "wrqeqw",
+      "email": "qwe@gg.vv",
+      "password": "fff",
+      "Status": "offline",
+      "id": 19
+    },
+    {
+      "fname": "uuuuu",
+      "lname": "uutyutyu",
+      "email": "amit@gg.com",
+      "password": "hhy",
+      "Status": "offline",
+      "id": 20
+    },
+    {
+      "fname": "ggg",
+      "lname": "jj",
+      "email": "rtet@hh.kk",
+      "password": "e",
+      "Status": "offline",
+      "id": 21
+    },
+    {
+      "fname": "tttyyy",
+      "lname": "hyhy",
+      "email": "amit@gg.com",
+      "password": "tt",
+      "Status": "offline",
+      "id": 22
+    },
+    {
+      "fname": "hhhhh",
+      "lname": "Upadhyay",
+      "email": "amit@gg.com",
+      "password": "g",
+      "Status": "offline",
+      "id": 23
+    },
+    {
+      "fname": "rrerww",
+      "lname": "qrwer",
+      "email": "Telly.Hoeger@billy.biz",
+      "password": "dfsr",
+      "Status": "offline",
+      "id": 24
+    },
+    {
+      "fname": "yutu",
+      "lname": "tr",
+      "email": "kkk@kk.com",
+      "password": "ee",
+      "Status": "offline",
+      "id": 25
+    },
+    {
+      "fname": "jtgytyi",
+      "lname": "ssrt",
+      "email": "jgftyk@kk.com",
+      "password": "ghfgh",
+      "Status": "offline",
+      "id": 26
+    },
+    {
+      "fname": "Aman",
+      "lname": "Kumar",
+      "email": "AKumar@gg.com",
+      "password": "123",
+      "Status": "offline",
+      "id": 27
+    },
+    {
+      "fname": "ku",
+      "lname": "ku",
+      "email": "ku@html.com",
+      "password": "tt",
+      "Status": "offline",
+      "id": 28
+    },
+    {
+      "fname": "Anmol",
+      "lname": "yadav",
+      "email": "aYadav@gy.com",
+      "password": "retrl",
+      "Status": "offline",
+      "id": 29
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
