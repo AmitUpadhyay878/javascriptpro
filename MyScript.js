@@ -6,6 +6,7 @@ let update = document.getElementById("update");
 var searchbox_2 = document.getElementById("myInput");
 searchbox_2.addEventListener("keyup", function () {
   var input, filter, table, tr, td, i, txtValue;
+
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("dataT");
@@ -42,28 +43,60 @@ searchbox_2.addEventListener("keyup", function () {
 
 // Filter Active/DeActive User using DropDown
 function datafilter(e) {
-  //  console.log(e.target.value);
   var input, filter, table, tr, td, i, txtValue;
+  var holdVal = e.target.value;
   input = document.getElementById("datafilter");
-  filter = input.value.toUpperCase();
+
+  // console.log(holdVal);
+  // filter = input.value.toUpperCase();
   table = document.getElementById("dataT");
   let tablebody = document.getElementById("output");
   tr = tablebody.getElementsByTagName("tr");
 
+  var output = document.getElementById("output");
+
+  output.innerHTML == "";
+  let localData = JSON.parse(localStorage.getItem("formData")) || [];
+
+  let hhhh = localData.filter((items) => {
+    console.log(items.Status == holdVal);
+    return items.Status == holdVal;
+  });
+  let datahhhh = hhhh.map((data) => {
+    return `
+                             <tr class="daaaa">
+                          <td><input type="checkbox" id="AllCheckbox" class="tableCheck" value=${data.id} /></td>
+                          <td>${data.fname}</td>
+                          <td>${data.lname}</td>
+                          <td>${data.email}</td>
+                          <td>${data.hobby} </td>
+                          <td>${data.Status}</td>
+                          <td>
+                          <button class="btn btn-warning " onClick='EditRegister(${data.id})'>Edit</button>
+                          </td>
+                          <td>
+                          <button class="btn btn-danger"  onClick='DeleteRegister(${data.id})'>Delete</button>
+                          </td>
+                          </td>
+                          </tr>
+                             `;
+  });
+  output.innerHTML = datahhhh.join("");
+
   // console.log(e.target.textContent);
 
   // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[5];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
+  // for (i = 0; i < tr.length; i++) {
+  //   td = tr[i].getElementsByTagName("td")[5];
+  //   if (td) {
+  //     txtValue = td.textContent || td.innerText;
+  //     if (txtValue.toUpperCase().indexOf(filter) > -1) {
+  //       tr[i].style.display = "";
+  //     } else {
+  //       tr[i].style.display = "none";
+  //     }
+  //   }
+  // }
 }
 
 function ResetAtt() {
@@ -118,6 +151,7 @@ function deleteAll() {
 }
 
 const signUp = (e) => {
+  e.preventDefault();
   let formData = JSON.parse(localStorage.getItem("formData")) || [];
 
   var hbox = document.querySelectorAll("input[type='checkbox']:checked");
@@ -143,7 +177,6 @@ const signUp = (e) => {
   localStorage.setItem("formData", JSON.stringify(formData));
   displayData();
   ResetAtt();
-  e.preventDefault();
 };
 
 function EditRegister(id) {
@@ -178,18 +211,21 @@ let deData = JSON.parse(localStorage.getItem("RecycleData"));
 //Delete Data By Id And Send To Recycle localStorage Table
 function DeleteRegister(id) {
   const local = JSON.parse(localStorage.getItem("formData")) || [];
+
   const ll = local.filter((e) => {
+    if (e.id == id) {
+      deData.push(e);
+    }
     return e.id != id;
   });
-
-  let arr = local.filter((item) => {
-    return !ll.includes(item);
-  });
-
-  deData.push(...arr);
+  // let arr = local.filter((item) => {
+  //   return !ll.includes(item.id);
+  // });
+  //console.log(arr);
+  // deData.push(...arr);
   localStorage.setItem("formData", JSON.stringify(ll));
   localStorage.setItem("RecycleData", JSON.stringify(deData));
-  displayData();
+  // displayData();
   RecycleDatas();
   window.location.reload();
 }
@@ -200,7 +236,7 @@ function DeleteRecycleData(id) {
     return e.id != id;
   });
   localStorage.setItem("RecycleData", JSON.stringify(ll));
-
+  displayData();
   RecycleDatas();
   window.location.reload();
 }
@@ -282,7 +318,7 @@ function displayData() {
     let localData = JSON.parse(localStorage.getItem("formData")) || [];
 
     let abcd = localData.map((data) => {
-      output.innerHTML += `
+      return `
                                <tr class="daaaa">
                             <td><input type="checkbox" id="AllCheckbox" class="tableCheck" value=${data.id} /></td>
                             <td>${data.fname}</td>
@@ -300,7 +336,7 @@ function displayData() {
                             </tr>
                                `;
     });
-    //  output.innerHTML = abcd;
+    output.innerHTML = abcd.join("");
   }
 }
 
@@ -363,7 +399,7 @@ function RecycleDatas() {
   let redata = JSON.parse(localStorage.getItem("RecycleData"));
 
   let abcd = redata.map((data) => {
-    RecycleData.innerHTML += `
+    return `
                                <tr class="daaaa">
 
                             <td>${data.fname}</td>
@@ -377,7 +413,7 @@ function RecycleDatas() {
                             </tr>
                                `;
   });
-  // RecycleData.innerHTML = abcd;
+  RecycleData.innerHTML = abcd.join("");
 }
 
 // Fetch Method with Promise OR   async/await
